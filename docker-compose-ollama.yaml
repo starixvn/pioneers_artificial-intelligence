@@ -1,0 +1,25 @@
+#version: '3.8' # Specify the Compose file version
+services:
+    ollama:
+        image: docker.io/ollama/ollama:0.6.3
+        container_name: ollama
+        hostname: ollama
+        ports:
+            - "7869:11434"
+        volumes:
+            - .:/code
+            - ./ollama/ollama:/root/.ollama
+        environment:
+            OLLAMA_KEEP_ALIVE: 24h
+            OLLAMA_HOST: 0.0.0.0
+        restart: always
+        tty: true
+        pull_policy: always
+        networks:
+            - ollama-network
+
+networks:
+    ollama-network:
+        external: ${NETWORK_EXTERNAL}
+        name: ${NETWORK_NAME}
+        driver: ${NETWORK_DRIVER}
